@@ -11,7 +11,9 @@ public class GeradorMensagensMotivacionaisEngracadasApplication {
 	public static void main(String[] args) {
 		try {
 			// Diretório com as imagens
-			String imageDir = "src/main/resources/static/images";
+			String imageDir = "src/main/resources/static/images/background/";
+
+			String textoImagem = "src/main/resources/static/images/texts/boa_noite_amarelo.png";
 
 			// Obter uma imagem aleatória
 			String caminhoImagemAleatoria = ImageRepository.getRandomImagePath(imageDir);
@@ -23,7 +25,7 @@ public class GeradorMensagensMotivacionaisEngracadasApplication {
 			String outputPath = "src/main/resources/static/images_output/";
 
 			// Gerar a imagem com texto
-			ImageGenerator.criarImagemComTexto(caminhoImagemAleatoria, texto, outputPath + MessageService.imageOutputName(outputPath));
+			ImageGenerator.sobreporImagem(caminhoImagemAleatoria, textoImagem, outputPath + MessageService.imageOutputName(outputPath));
 
 			System.out.println("Imagem gerada com sucesso em: " + outputPath);
 		} catch (Exception e) {
