@@ -28,8 +28,12 @@ public class GeradorMensagensMotivacionaisEngracadasApplication {
 			ImageGenerator.sobreporImagem(
 					caminhoBackground,
 					imagePath,
+					textoImagem,
 					outputPath + MessageService.imageOutputName(outputPath),
-						);
+					content.getContentX(),
+					content.getContentY(),
+					content.getTextX(),
+					content.getTextY());
 
 			System.out.println("Imagem gerada com sucesso em: " + outputPath);
 		} catch (Exception e) {

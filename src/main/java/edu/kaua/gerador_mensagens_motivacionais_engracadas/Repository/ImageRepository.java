@@ -7,13 +7,13 @@ import java.io.File;
 import java.util.Random;
 
 @Repository
-public interface ImageRepository{
+public interface ImageRepository {
 
     public
-        String textImagesDir = "src/main/resources/static/images/texts/";
-        String contentDirLeft = "src/main/resources/static/images/left";
-        String contentDirMiddle = "src/main/resources/static/images/middle";
-        String contentDirRight = "src/main/resources/static/images/right";
+    String textImagesDir = "src/main/resources/static/images/texts";
+    String contentDirLeft = "src/main/resources/static/images/content/left";
+    String contentDirMiddle = "src/main/resources/static/images/content/middle";
+    String contentDirRight = "src/main/resources/static/images/content/right";
 
     public static String getRandomPath(String directoryPath, String dirExclusion) throws Exception {
         // Valida se o diretório existe e é realmente um diretório
@@ -46,53 +46,63 @@ public interface ImageRepository{
 
         return files[index].getAbsolutePath();
     }
-    //Sim, esse metodo esta feio, reconheco isso, supere
+
     public static ContentInfo contentSelector() throws Exception {
-        File contentFile = new File(getRandomPath(getRandomPath("src/main/resources/static/images/", null), null));
+        File contentFile = new File(
+                getRandomPath(
+                        getRandomPath("src/main/resources/static/images/content", null), null));
+
+        File textFile = new File(
+                getRandomPath(
+                        getRandomPath("src/main/resources/static/images/texts", null), null));
+
+        String parentDirName = new File(contentFile.getParent()).getName();
+        String parentDirNametext = new File(textFile.getParent()).getName();
 
         ContentInfo content = new ContentInfo(
                 contentFile.getAbsolutePath(),
-                "null");
+                textFile.getAbsolutePath());
 
-        if(contentFile.getParent().equals(contentDirLeft)) {
-            content.setTextPath(getRandomPath(textImagesDir,"src/main/resources/static/images/texts/left"));
-            content.setContentX(0);
-            content.setContentY(1024);
-
-            if (content.getTextPath().equals("src/main/resources/static/images/texts/middle")) {
-                content.setTextX();
-                content.setTextY();
-            }else{
-                content.setTextX();
-                content.setTextY();
-            }
+        switch (parentDirName) {
+            case "left":
+                content.setContentX(0);
+                content.setContentY(1024 - 512);
+                if (parentDirNametext.equals("middle-top")) {
+                    content.setTextX(512);
+                    content.setTextY(128);
+                } else {
+                    content.setTextX(640);
+                    content.setTextY(512);
+                }
+                break;
+            case "middle":
+                content.setContentX((1024 - 512) / 2);
+                content.setContentY(1024 - 512);
+                if (parentDirNametext.equals("left")) {
+                    content.setTextX(128);
+                    content.setTextY(512);
+                } else if (parentDirNametext.equals("middle-top")) {
+                    content.setTextX(512);
+                    content.setTextY(128);
+                } else {
+                    content.setTextX(640);
+                    content.setTextY(512);
+                }
+                break;
+            case "right":
+                content.setContentX(1024 - 512);
+                content.setContentY(1024 - 512);
+                if (parentDirNametext.equals("middle-top")) {
+                    content.setTextX(512);
+                    content.setTextY(128);
+                } else {
+                    content.setTextX(128);
+                    content.setTextY(512);
+                }
+                break;
+            default:
+                throw new Exception("Diretório desconhecido: " + parentDirName);
         }
-        if (contentFile.getParent().equals(contentDirMiddle)) {
-            content.setTextPath(getRandomPath(textImagesDir,"src/main/resources/static/images/texts/middle"));
-            content.setContentX();
-            content.setContentY();
-
-            if (content.getTextPath().equals("src/main/resources/static/images/texts/middle")) {
-                content.setTextX();
-                content.setTextY();
-            }else{
-                content.setTextX();
-                content.setTextY();
-            }
-        }
-        if (contentFile.getParent().equals(contentDirRight)) {
-            content.setTextPath(getRandomPath(textImagesDir,"src/main/resources/static/images/texts/right"));
-
-            content.setContentX();
-            content.setContentY();
-
-            if (content.getTextPath().equals("src/main/resources/static/images/texts/middle")) {
-                content.setTextX();
-                content.setTextY();
-            }else{
-                content.setTextX();
-                content.setTextY();
-            }
         return content;
     }
 }
