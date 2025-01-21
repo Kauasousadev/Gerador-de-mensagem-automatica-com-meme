@@ -1,5 +1,6 @@
 package edu.kaua.gerador_mensagens_motivacionais_engracadas;
 
+import edu.kaua.gerador_mensagens_motivacionais_engracadas.Domain.ContentInfo;
 import edu.kaua.gerador_mensagens_motivacionais_engracadas.Domain.ImageGenerator;
 import edu.kaua.gerador_mensagens_motivacionais_engracadas.Repository.ImageRepository;
 import edu.kaua.gerador_mensagens_motivacionais_engracadas.Service.MessageService;
@@ -10,22 +11,25 @@ public class GeradorMensagensMotivacionaisEngracadasApplication {
 
 	public static void main(String[] args) {
 		try {
+			// Escolher conteúdo aleatório com validações de posição
+			ContentInfo content = ImageRepository.contentSelector();
+
 			// Diretório com as imagens
-			String imageDir = "src/main/resources/static/images/background/";
-
-			String textoImagem = "src/main/resources/static/images/texts/boa_noite_amarelo.png";
-
-			// Obter uma imagem aleatória
-			String caminhoImagemAleatoria = ImageRepository.getRandomImagePath(imageDir);
-
-			// Mensagem motivacional
-			String texto = "Bom dia!";
-
-			// Caminho para salvar a imagem gerada
+			String backgroundDir = "src/main/resources/static/images/background/";
+            assert content != null;
+			String imagePath = content.getContentPath();
+			String textoImagem = content.getTextPath();
 			String outputPath = "src/main/resources/static/images_output/";
 
-			// Gerar a imagem com texto
-			ImageGenerator.sobreporImagem(caminhoImagemAleatoria, textoImagem, outputPath + MessageService.imageOutputName(outputPath));
+			// Escolher fundo aleatório
+			String caminhoBackground = ImageRepository.getRandomPath(backgroundDir, null);
+
+			// Juntar background com imagem aleatória
+			ImageGenerator.sobreporImagem(
+					caminhoBackground,
+					imagePath,
+					outputPath + MessageService.imageOutputName(outputPath),
+						);
 
 			System.out.println("Imagem gerada com sucesso em: " + outputPath);
 		} catch (Exception e) {

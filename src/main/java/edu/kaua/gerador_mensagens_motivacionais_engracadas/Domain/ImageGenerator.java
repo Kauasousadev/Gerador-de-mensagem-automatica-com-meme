@@ -50,17 +50,13 @@ public class ImageGenerator {
         ImageIO.write(imagemFundo, "jpg", new File(caminhoSaida));
     }
 
-    public static void sobreporImagem(String caminhoFundo, String caminhoPng, String caminhoSaida) throws IOException {
+    public static void sobreporImagem(String caminhoFundo, String caminhoPng, String caminhoSaida, int x, int y) throws IOException {
         // Carrega as imagens
         BufferedImage imagemFundo = ImageIO.read(new File(caminhoFundo));
         BufferedImage imagemPng = ImageIO.read(new File(caminhoPng));
 
         // Obtém o contexto gráfico da imagem de fundo
         Graphics2D g2d = imagemFundo.createGraphics();
-
-        // Define as coordenadas para sobrepor o PNG
-        int x = (imagemFundo.getWidth() - imagemPng.getWidth()) / 2; // Centraliza no eixo X
-        int y = (imagemFundo.getHeight() - imagemPng.getHeight()) / 2; // Centraliza no eixo Y
 
         // Sobrepõe o PNG na imagem de fundo
         g2d.drawImage(imagemPng, x, y, null);
