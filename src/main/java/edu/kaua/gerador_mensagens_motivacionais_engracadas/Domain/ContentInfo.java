@@ -4,14 +4,42 @@ public class ContentInfo {
 
     private String contentPath;
     private String textPath;
+    private String titlePath;
     private int contentX;
     private int contentY;
     private int textX;
     private int textY;
+    private int titleX = 256;
+    private int titleY = 128;
 
-    public ContentInfo(String contentPath, String textPath) {
+    public ContentInfo(String contentPath, String textPath, String titlePath) {
         this.contentPath = contentPath;
         this.textPath = textPath;
+        this.titlePath = titlePath;
+    }
+
+    public String getTitlePath() {
+        return titlePath;
+    }
+
+    public void setTitlePath(String titlePath) {
+        this.titlePath = titlePath;
+    }
+
+    public int getTitleX() {
+        return titleX;
+    }
+
+    public void setTitleX(int titleX) {
+        this.titleX = titleX;
+    }
+
+    public int getTitleY() {
+        return titleY;
+    }
+
+    public void setTitleY(int titleY) {
+        this.titleY = titleY;
     }
 
     public String getContentPath() {

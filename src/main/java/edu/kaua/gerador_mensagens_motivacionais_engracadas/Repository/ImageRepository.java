@@ -9,12 +9,6 @@ import java.util.Random;
 @Repository
 public interface ImageRepository {
 
-    public
-    String textImagesDir = "src/main/resources/static/images/texts";
-    String contentDirLeft = "src/main/resources/static/images/content/left";
-    String contentDirMiddle = "src/main/resources/static/images/content/middle";
-    String contentDirRight = "src/main/resources/static/images/content/right";
-
     public static String getRandomPath(String directoryPath, String dirExclusion) throws Exception {
         // Valida se o diretório existe e é realmente um diretório
         File dir = new File(directoryPath);
@@ -48,57 +42,53 @@ public interface ImageRepository {
     }
 
     public static ContentInfo contentSelector() throws Exception {
+
+        //Seleção aleatória do conteúdo
         File contentFile = new File(
                 getRandomPath(
                         getRandomPath("src/main/resources/static/images/content", null), null));
 
         File textFile = new File(
-                getRandomPath(
-                        getRandomPath("src/main/resources/static/images/texts", null), null));
+                getRandomPath("src/main/resources/static/images/texts/text", null));
 
+        File titleFile = new File(
+                getRandomPath("src/main/resources/static/images/texts/title", null));
+
+        //Recebendo nome do diretório dos arquivos para validação
         String parentDirName = new File(contentFile.getParent()).getName();
-        String parentDirNametext = new File(textFile.getParent()).getName();
 
+        //criando objeto contentInfo
         ContentInfo content = new ContentInfo(
                 contentFile.getAbsolutePath(),
-                textFile.getAbsolutePath());
+                textFile.getAbsolutePath(),
+                titleFile.getAbsolutePath());
 
+        //Validações e setters de posições
         switch (parentDirName) {
-            case "left":
+            case "left": //Conteúdo na esquerda, texto na direita
                 content.setContentX(0);
                 content.setContentY(1024 - 512);
-                if (parentDirNametext.equals("middle-top")) {
-                    content.setTextX(512);
-                    content.setTextY(128);
-                } else {
-                    content.setTextX(640);
-                    content.setTextY(512);
-                }
+                content.setTextX(512);
+                content.setTextY(256);
                 break;
-            case "middle":
+            case "middle"://Conteúdo no meio, texto na esquerda ou na direita
                 content.setContentX((1024 - 512) / 2);
                 content.setContentY(1024 - 512);
-                if (parentDirNametext.equals("left")) {
+
+                Random random = new Random();//Se retornar true conteúdo na esquerda, se false na direita
+                if (random.nextBoolean()) {
                     content.setTextX(128);
-                    content.setTextY(512);
-                } else if (parentDirNametext.equals("middle-top")) {
+                    content.setTextY(256);
+                }else {
                     content.setTextX(512);
-                    content.setTextY(128);
-                } else {
-                    content.setTextX(640);
-                    content.setTextY(512);
+                    content.setTextY(256);
                 }
                 break;
             case "right":
                 content.setContentX(1024 - 512);
                 content.setContentY(1024 - 512);
-                if (parentDirNametext.equals("middle-top")) {
-                    content.setTextX(512);
-                    content.setTextY(128);
-                } else {
-                    content.setTextX(128);
-                    content.setTextY(512);
-                }
+                content.setTextX(128);
+                content.setTextY(256);
                 break;
             default:
                 throw new Exception("Diretório desconhecido: " + parentDirName);
